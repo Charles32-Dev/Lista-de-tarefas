@@ -1,18 +1,14 @@
 import { v4 as uuidv4 } from 'uuid';
 import { useState } from 'react';
 
-import { Container, Showlist, Input, Button, ListItem } from './styled.js'
-
-import { FcCheckmark } from "react-icons/fc";
-import { FcEmptyTrash } from "react-icons/fc";
-
+import { Container, Showlist, Input, Button, ListItem, Trash, Check } from './styled.js'
 
 
 
 
 function App() {
 
-  const [list, setList] = useState([{ id: uuidv4(), task: '', finished: true }]);
+  const [list, setList] = useState([]);
   const [task, setTask] = useState('')
 
   function TypedTheMessage(event) {
@@ -22,7 +18,8 @@ function App() {
   }
 
   function ButtonClicked() {
-    setList([...list, { id: uuidv4(), task, finished: false }]);
+    if (task) { setList([...list, { id: uuidv4(), task, finished: false }]); }
+
   }
 
   function finished(id) {
@@ -50,16 +47,22 @@ function App() {
 
 
         <ul>
-          {list.map(item => (
+          {
+            list.length > 0 ? (
 
-            <ListItem isFinish={item.finished} key={item.id}>
-              <FcCheckmark onClick={() => finished(item.id)} />
-              <li >{item.task}</li>
-              <FcEmptyTrash onClick={() => deleteItem(item.id)} />
-            </ListItem>
+              list.map(item => (
 
-          ))}
+                <ListItem isFinish={item.finished} key={item.id}>
+                  <Check onClick={() => finished(item.id)} />
+                  <li >{item.task}</li>
+                  <Trash onClick={() => deleteItem(item.id)} />
+                </ListItem>
 
+              ))
+            ) : (
+              <h3>Não há itens na lista</h3>
+            )
+          }
         </ul>
 
       </Showlist>
